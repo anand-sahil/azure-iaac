@@ -1,0 +1,180 @@
+name: terraform-multi
+
+on:
+  workflow_call:
+    inputs:
+      environment:      { type: string,  required: true }
+      tfvars_file:      { type: string,  required: true }
+      rgname:           { type: string,  required: true }
+      saname:           { type: string,  required: true }
+      scname:           { type: string,  required: true }
+      key:              { type: string,  required: true }
+
+      runInit:          { type: boolean, default: false }
+      runPlan:          { type: boolean, default: false }
+      runApply:         { type: boolean, default: false }
+      runDestroy:       { type: boolean, default: false }
+
+      useEnvironmentInit:    { type: boolean, default: false }
+      useEnvironmentPlan:    { type: boolean, default: false }
+      useEnvironmentApply:   { type: boolean, default: false }
+      useEnvironmentDestroy: { type: boolean, default: false }
+
+    secrets:
+      AZURE_CLIENT_ID:       { required: false }
+      AZURE_TENANT_ID:       { required: false }
+      AZURE_SUBSCRIPTION_ID: { required: false }
+
+
+permissions:
+  id-token: write
+  contents: read
+
+
+env:
+  WORKDIR: infra
+  # Managed Identity auth for Terraform azurerm provider + backend
+  ARM_USE_MSI: "true"
+  ARM_CLIENT_ID: ${{ vars.MI_CLIENT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+
+  
+jobs:
+
+  # add this job in your prod workflow (runs on ubuntu-latest)
+  preview-options:
+    name: Preview selected options
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Show triggerevent info
+        run: |
+          echo "=================================================================="
+          echo " This workflow was triggered by, GITHUB EVENT: ${{ github.event_name }}"
+          echo "=================================================================="
+          echo ""
+          echo "======================"
+          echo "REF: ${{ github.ref }}"
+          echo "======================"
+          echo ""
+
+      - name: Compute and print inputs + derived toggles
+        env:
+          # inputs provided by the caller workflow (workflow_call inputs)
+          input_runInit:            ${{ inputs.runInit }}
+          input_runPlan:            ${{ inputs.runPlan }}
+          input_runApply:           ${{ inputs.runApply }}
+          input_runDestroy:         ${{ inputs.runDestroy }}
+
+          input_useEnvironmentInit:    ${{ inputs.useEnvironmentInit }}
+          input_useEnvironmentPlan:    ${{ inputs.useEnvironmentPlan }}
+          input_useEnvironmentApply:   ${{ inputs.useEnvironmentApply }}
+          input_useEnvironmentDestroy: ${{ inputs.useEnvironmentDestroy }}
+
+        run: |
+          echo "---- Actual inputs received (workflow_call inputs) ----"
+          echo "runInit:     $input_runInit"
+          echo "runPlan:     $input_runPlan"
+          echo "runApply:    $input_runApply"
+          echo "runDestroy:  $input_runDestroy"
+          echo ""
+          echo "---- Environment approval inputs (caller-controlled) ----"
+          echo "useEnvironmentInit:    $input_useEnvironmentInit"
+          echo "useEnvironmentPlan:    $input_useEnvironmentPlan"
+          echo "useEnvironmentApply:   $input_useEnvironmentApply"
+          echo "useEnvironmentDestroy: $input_useEnvironmentDestroy"
+
+          echo "---- Note ----"
+          echo "If any job has 'environment: <non-empty>' that job will request approval from that environment's protection rules."
+
+
+  # 1️⃣ INIT + FMT + VALIDATE
+  init:
+    if: ${{ inputs.runInit }}
+    runs-on: aca-runner
+    environment: ${{ inputs.useEnvironmentInit && inputs.environment || '' }}
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Terraform Init
+        run: terraform init -input=false -backend-config="resource_group_name=${{ inputs.rgname }}" -backend-config="storage_account_name=${{ inputs.saname }}" -backend-config="container_name=${{ inputs.scname }}" -backend-config="key=${{ inputs.key }}" -backend-config="use_azuread_auth=true"
+
+      - run: terraform fmt -recursive
+      - run: terraform validate
+
+
+  # 2️⃣ PLAN
+  plan:
+    name: Terraform Plan
+    needs: [init]
+    if: ${{ inputs.runPlan && (needs.init.result == 'success' || !inputs.runInit) }}
+    runs-on: aca-runner
+    environment: ${{ inputs.useEnvironmentPlan && inputs.environment || '' }}
+
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Terraform Init
+        run: terraform init -input=false -backend-config="resource_group_name=${{ inputs.rgname }}" -backend-config="storage_account_name=${{ inputs.saname }}" -backend-config="container_name=${{ inputs.scname }}" -backend-config="key=${{ inputs.key }}" -backend-config="use_azuread_auth=true"
+
+      - name: Terraform Plan
+        run: terraform plan -var-file="../environments/${{ inputs.environment }}.tfvars" -out="tf-plan-${{ inputs.environment }}.tfplan"
+
+      - name: Upload plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: tf-plan-${{ inputs.environment }}.tfplan
+          path: infra/tf-plan-${{ inputs.environment }}.tfplan
+            
+
+  # 3️⃣ APPLY
+  apply:
+    needs: [plan]
+    if: ${{ inputs.runApply && needs.plan.result == 'success' }}
+    runs-on: aca-runner
+    environment: ${{ inputs.useEnvironmentApply && inputs.environment || '' }}
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - name: Download plan
+        uses: actions/download-artifact@v4
+        with:
+          name: tf-plan-${{ inputs.environment }}.tfplan
+          path: infra
+
+      - name: Terraform Init
+        run: terraform init -input=false -backend-config="resource_group_name=${{ inputs.rgname }}" -backend-config="storage_account_name=${{ inputs.saname }}" -backend-config="container_name=${{ inputs.scname }}" -backend-config="key=${{ inputs.key }}" -backend-config="use_azuread_auth=true"
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve "tf-plan-${{ inputs.environment }}.tfplan"
+
+
+  # 4️⃣ DESTROY
+  destroy:
+
+    if: ${{ inputs.runDestroy }}
+    runs-on: aca-runner
+    environment: ${{ inputs.useEnvironmentDestroy && inputs.environment || '' }}
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}    
+   
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Terraform Init
+        run: terraform init -input=false -backend-config="resource_group_name=${{ inputs.rgname }}" -backend-config="storage_account_name=${{ inputs.saname }}" -backend-config="container_name=${{ inputs.scname }}" -backend-config="key=${{ inputs.key }}" -backend-config="use_azuread_auth=true"
+
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve -var-file="../${{ inputs.tfvars_file }}"
