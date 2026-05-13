@@ -1,6 +1,6 @@
 resource_groups = {
   rg1 = {
-    name     = "rit-qa-rg1"
+    name     = "test-tfrg"
     location = "North Europe"
   }
 }
