@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     lsb-release \
     git \
     jq \
+    sudo \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Terraform
@@ -26,4 +27,13 @@ RUN curl -fsSL "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/te
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash \
     && az version
 
+# Allow runner user to use sudo (needed for some Terraform providers)
+RUN echo "runner ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/runner
+
+COPY entrypoint.sh /home/runner/entrypoint.sh
+RUN chmod +x /home/runner/entrypoint.sh
+
 USER runner
+WORKDIR /home/runner
+
+ENTRYPOINT ["/home/runner/entrypoint.sh"]

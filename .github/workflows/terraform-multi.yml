@@ -33,9 +33,7 @@ permissions:
 
 env:
   WORKDIR: infra
-  # Managed Identity auth for Terraform azurerm provider + backend
-  ARM_USE_MSI: "true"
-  ARM_CLIENT_ID: ${{ vars.MI_CLIENT_ID }}
+  # Terraform uses Azure CLI credentials (az login --identity in entrypoint.sh)
   ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
 
