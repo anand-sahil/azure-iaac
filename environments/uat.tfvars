@@ -1,6 +1,6 @@
 resource_groups = {
   rg1 = {
-    name     = "rit-uat-rg1"
+    name     = "test_rg"
     location = "North Europe"
   }
 }
