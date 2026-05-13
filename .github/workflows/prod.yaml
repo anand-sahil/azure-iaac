@@ -35,10 +35,7 @@ jobs:
     with:
       environment:  prod
       tfvars_file:  environments/prod.tfvars
-      rgname:       ritkargv
-      saname:       ritkasav
-      scname:       ritkascv
-      key:          prod.tfstate
+      key:          prod/terraform.tfstate
 
       # Run toggles
       runInit:     ${{ github.event_name == 'push' || inputs.do_init == true }}

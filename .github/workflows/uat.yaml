@@ -36,11 +36,7 @@ jobs:
       environment:  uat
       tfvars_file:  environments/uat.tfvars
 
-      # Storage backend for UAT (change names as per your setup)
-      rgname:       ritkargv
-      saname:       ritkasav
-      scname:       ritkascv
-      key:          uat.tfstate
+      key:          uat/terraform.tfstate
 
       # Run toggles
       runInit:     ${{ github.event_name == 'push' || inputs.do_init == true }}

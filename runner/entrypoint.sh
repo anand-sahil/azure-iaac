@@ -1,13 +1,24 @@
 #!/bin/bash
-set -euo pipefail
+set -eo pipefail
 
 echo "========================================"
 echo " GitHub Actions Self-Hosted Runner"
 echo "========================================"
 echo "Runner Host: $(hostname)"
-echo "Terraform:   $(terraform version -json | jq -r '.terraform_version')"
-echo "Azure CLI:   $(az version --query '\"azure-cli\"' -o tsv)"
+echo "Terraform:   $(terraform version -json 2>/dev/null | jq -r '.terraform_version' 2>/dev/null || echo 'not found')"
+echo "Azure CLI:   $(az version 2>/dev/null | jq -r '.["azure-cli"]' 2>/dev/null || echo 'not found')"
 echo "========================================"
+
+RUNNER_TOKEN=""
+
+# Cleanup: deregister runner on exit
+cleanup() {
+  if [ -n "$RUNNER_TOKEN" ]; then
+    echo "Removing runner registration..."
+    ./config.sh remove --token "$RUNNER_TOKEN" 2>/dev/null || true
+  fi
+}
+trap cleanup EXIT
 
 # Validate required environment variables
 for var in GITHUB_PAT REPO_OWNER REPO_NAME; do
@@ -24,19 +35,12 @@ REPO_URL="https://github.com/${REPO_OWNER}/${REPO_NAME}"
 # Log in to Azure using ACA managed identity (needed for Terraform to access storage + ARM)
 if [ -n "${IDENTITY_ENDPOINT:-}" ]; then
   echo "Logging in to Azure with managed identity..."
-  az login --identity ${MI_CLIENT_ID:+--username "$MI_CLIENT_ID"} --allow-no-subscriptions -o none
+  az login --identity ${MI_CLIENT_ID:+--client-id "$MI_CLIENT_ID"} --allow-no-subscriptions -o none
   az account set --subscription "${ARM_SUBSCRIPTION_ID:-$(az account show --query id -o tsv)}"
   echo "Azure login successful: $(az account show --query '{subscription:name, id:id}' -o json)"
 else
   echo "WARNING: IDENTITY_ENDPOINT not set — not running on ACA. Skipping az login."
 fi
-
-# Cleanup: deregister runner on exit
-cleanup() {
-  echo "Removing runner registration..."
-  ./config.sh remove --token "$RUNNER_TOKEN" 2>/dev/null || true
-}
-trap cleanup EXIT
 
 # Generate a registration token using the GitHub PAT
 echo "Requesting runner registration token..."

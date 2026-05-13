@@ -34,10 +34,7 @@ jobs:
     with:
       environment:  dev
       tfvars_file:  environments/dev.tfvars
-      rgname:       ritkargv
-      saname:       ritkasav
-      scname:       ritkascv
-      key:          dev.tfstate
+      key:          dev/terraform.tfstate
 
       # Run toggles
       runInit:     ${{ github.event_name == 'push' || inputs.do_init == true }}

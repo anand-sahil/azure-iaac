@@ -31,7 +31,7 @@ RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash \
 RUN echo "runner ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/runner
 
 COPY entrypoint.sh /home/runner/entrypoint.sh
-RUN chmod +x /home/runner/entrypoint.sh
+RUN sed -i 's/\r$//' /home/runner/entrypoint.sh && chmod +x /home/runner/entrypoint.sh
 
 USER runner
 WORKDIR /home/runner

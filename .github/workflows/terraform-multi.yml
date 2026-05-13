@@ -5,9 +5,9 @@ on:
     inputs:
       environment:      { type: string,  required: true }
       tfvars_file:      { type: string,  required: true }
-      rgname:           { type: string,  required: true }
-      saname:           { type: string,  required: true }
-      scname:           { type: string,  required: true }
+      rgname:           { type: string,  default: 'tfstorage-rg' }
+      saname:           { type: string,  default: 'tfstorage002' }
+      scname:           { type: string,  default: 'tfstate' }
       key:              { type: string,  required: true }
 
       runInit:          { type: boolean, default: false }
