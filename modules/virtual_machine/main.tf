@@ -5,7 +5,7 @@ data "azurerm_network_interface" "nic_ids_db" {
 }
 
 
-resource "azurerm_linux_virtual_machine" "rit-vm" {
+resource "azurerm_linux_virtual_machine" "sahil-vm" {
   for_each = var.vms
 
   name                = each.value.vm_name

@@ -1,6 +1,6 @@
 resource_groups = {
   rg1 = {
-    name     = "rit-hrutviatri"
+    name     = "sahil-hrutviatri"
     location = "North Europe"
   }
 }
@@ -17,7 +17,7 @@ vnets = {
   vnet1 = {
     vnet_name     = "sahilavnet"
     location      = "North Europe"
-    rg_name       = "rit-rg1"
+    rg_name       = "sahil-rg1"
     address_space = ["10.0.0.0/23"] # 512 addresses
     subnets = {
       subnet1 = {
@@ -25,7 +25,7 @@ vnets = {
         subnet_address_prefixes = ["10.0.0.0/24"] # 256 addresses
       }
       subnet2 = {
-        subnet_name             = "dusrasubnet"
+        subnet_name             = "secondsubnet"
         subnet_address_prefixes = ["10.0.1.0/25"] # 128 addresses
       }
       subnetab = {
@@ -33,7 +33,7 @@ vnets = {
         subnet_address_prefixes = ["10.0.1.128/26"] # 10.0.0.128/26-24 - 64 to 256 addresses   
       }
       subnet3 = {
-        subnet_name             = "tisrasubnet"
+        subnet_name             = "thirdsubnet"
         subnet_address_prefixes = ["10.0.1.192/27"] # 32 addresses
       }
     }
@@ -48,7 +48,7 @@ nsg = {
   web_nsg = {
     nsg_name = "sahilansg"
     location = "North Europe"
-    rg_name  = "rit-rg1"
+    rg_name  = "sahil-rg1"
 
     security_rules = {
       allow_http = {
@@ -76,9 +76,9 @@ nsg = {
     }
   }
   empty_rule_nsg = {
-    nsg_name = "dusransg"
+    nsg_name = "secondnsg"
     location = "North Europe"
-    rg_name  = "rit-rg1"
+    rg_name  = "sahil-rg1"
   }
 }
 
@@ -89,7 +89,7 @@ nsg = {
 nics = {
   nic1 = {
     nic_name    = "sahilanic"
-    rg_name     = "rit-rg1"
+    rg_name     = "sahil-rg1"
     location    = "North Europe"
     vnet_name   = "sahilavnet"
     subnet_name = "sahilasubnet"
@@ -104,21 +104,21 @@ nics = {
   }
 
   nic2 = {
-    nic_name    = "dusranic"
-    rg_name     = "rit-rg1"
+    nic_name    = "secondnic"
+    rg_name     = "sahil-rg1"
     location    = "North Europe"
     vnet_name   = "sahilavnet"
-    subnet_name = "dusrasubnet"
+    subnet_name = "secondsubnet"
 
     ip_configurations = {
       ipconfig2 = {
-        ip_config_name        = "dusra-internal"
+        ip_config_name        = "second-internal"
         private_ip_allocation = "Dynamic"
         primary               = true
         # public_ip_name        = "loadbalancerpip"
       }
       ipconfig3 = {
-        ip_config_name        = "tisra-internal"
+        ip_config_name        = "third-internal"
         private_ip_allocation = "Static"
         private_ip_address    = "10.0.1.75"
         public_ip_name        = null
@@ -136,12 +136,12 @@ pips = {
   bastionpip = {
     pip_name = "bastionpip"
     location = "North Europe"
-    rg_name  = "rit-rg1"
+    rg_name  = "sahil-rg1"
   }
   loadbalancer = {
     pip_name = "loadbalancerpip"
     location = "North Europe"
-    rg_name  = "rit-rg1"
+    rg_name  = "sahil-rg1"
   }
 }
 
@@ -152,7 +152,7 @@ bastion = {
   bastion1 = {
     bastion_name = "sahilabastion"
     location     = "North Europe"
-    rg_name      = "rit-rg1"
+    rg_name      = "sahil-rg1"
     vnet_name    = "sahilavnet"
     subnet_name  = "AzureBastionSubnet"
     pip_name     = "bastionpip"
@@ -170,12 +170,12 @@ nic_nsg_ids = {
   nic_nsg_1 = {
     nic_name = "sahilanic"
     nsg_name = "sahilansg"
-    rg_name  = "rit-rg1"
+    rg_name  = "sahil-rg1"
   }
   nic_nsg_2 = {
-    nic_name = "dusranic"
+    nic_name = "secondnic"
     nsg_name = "sahilansg"
-    rg_name  = "rit-rg1"
+    rg_name  = "sahil-rg1"
   }
 }
 
@@ -186,11 +186,11 @@ nic_nsg_ids = {
 vms = {
   frontend = {
     vm_name                      = "frontendvm"
-    rg_name                      = "rit-rg1"
+    rg_name                      = "sahil-rg1"
     location                     = "North Europe"
     vm_size                      = "Standard_B1s"
     admin_username               = "frontendvm"
-    admin_password               = "Ritesh@12345"
+    admin_password               = "Sahil@12345"
     nic_name                     = "sahilanic"
     os_disk_caching              = "ReadWrite"
     os_disk_storage_account_type = "Standard_LRS"
@@ -211,12 +211,12 @@ vms = {
   }
   backend = {
     vm_name                      = "backendvm"
-    rg_name                      = "rit-rg1"
+    rg_name                      = "sahil-rg1"
     location                     = "North Europe"
     vm_size                      = "Standard_B1s"
     admin_username               = "backendvm"
-    admin_password               = "Ritesh@12345"
-    nic_name                     = "dusranic"
+    admin_password               = "Sahil@12345"
+    nic_name                     = "secondnic"
     os_disk_caching              = "ReadWrite"
     os_disk_storage_account_type = "Standard_LRS"
     vm_publisher                 = "Canonical"
@@ -242,22 +242,22 @@ vms = {
 
 # sql_servers = {
 #   sqlserver1 = {
-#     sqlservername         = "ritsqlserver1q"
-#     rg_name               = "rit-rg1"
+#     sqlservername         = "sahilsqlserver1q"
+#     rg_name               = "sahil-rg1"
 #     location              = "North Europe"
 #     version               = "12.0"
 #     server_login_username = "server"
-#     server_login_password = "Ritesh@12345"
+#     server_login_password = "Sahil@12345"
 
 #     public_network_access_enabled = false
 #   }
 #   sqlserver2 = {
-#     sqlservername         = "ritsqlserver2q"
-#     rg_name               = "rit-rg1"
+#     sqlservername         = "sahilsqlserver2q"
+#     rg_name               = "sahil-rg1"
 #     location              = "North Europe"
 #     version               = "12.0"
 #     server_login_username = "server"
-#     server_login_password = "Ritesh@12345"
+#     server_login_password = "Sahil@12345"
 
 #     public_network_access_enabled = true
 #   }
@@ -268,22 +268,22 @@ vms = {
 
 sql_servers = {
   server1 = {
-    sqlservername                 = "ritsqlserver1123"
-    rg_name                       = "rit-rg1"
+    sqlservername                 = "sahilsqlserver1123"
+    rg_name                       = "sahil-rg1"
     location                      = "North Europe"
     version                       = "12.0"
     server_login_username         = "server"
-    server_login_password         = "Ritesh@12345"
+    server_login_password         = "Sahil@12345"
     public_network_access_enabled = true
   }
 
   # server2 = {
-  #   sqlservername                 = "ritsqlserver12"
-  #   rg_name                       = "rit-rg1"
+  #   sqlservername                 = "sahilsqlserver12"
+  #   rg_name                       = "sahil-rg1"
   #   location                      = "North Europe"
   #   version                       = "12.0"
   #   server_login_username         = "server"
-  #   server_login_password         = "Ritesh@12345"
+  #   server_login_password         = "Sahil@12345"
   #   public_network_access_enabled = false
   # }
 }
@@ -315,14 +315,14 @@ firewall_rules = {
 sql_databases = {
   db1 = {
     name           = "appdb"
-    server_name    = "ritsqlserver1123"
-    resource_group = "rit-rg1"
+    server_name    = "sahilsqlserver1123"
+    resource_group = "sahil-rg1"
     sku_name       = "S0"
   }
   db2 = {
     name           = "analyticsdb"
-    server_name    = "ritsqlserver1123"
-    resource_group = "rit-rg1"
+    server_name    = "sahilsqlserver1123"
+    resource_group = "sahil-rg1"
     sku_name       = "S1"
     max_size_gb    = 20
     zone_redundant = false
@@ -334,14 +334,14 @@ sql_databases = {
 
 azurerm_lb_rb = {
   lb1 = {
-    rg_name  = "rit-rg1"
+    rg_name  = "sahil-rg1"
     pip_name = "loadbalancerpip"
-    lb_name  = "rit-loadbalancer"
+    lb_name  = "sahil-loadbalancer"
     location = "North Europe"
     sku      = "Standard"
     frontend_ip_config = [
       {
-        name = "rit-frontend-ipconfig"
+        name = "sahil-frontend-ipconfig"
       }
     ]
   }
@@ -349,51 +349,51 @@ azurerm_lb_rb = {
 
 backend_ap_rb = {
   bap1 = {
-    lb_name           = "rit-loadbalancer"
-    rg_name           = "rit-rg1"
-    backend_pool_name = "rit-backend-pool"
+    lb_name           = "sahil-loadbalancer"
+    rg_name           = "sahil-rg1"
+    backend_pool_name = "sahil-backend-pool"
   }
 }
 
 nic_bp_association = {
   firstassociation = {
     nic_name                  = "sahilanic"
-    nic_rg_name               = "rit-rg1"
-    lb_name                   = "rit-loadbalancer"
-    rg_name                   = "rit-rg1"
-    backend_address_pool_name = "rit-backend-pool"
+    nic_rg_name               = "sahil-rg1"
+    lb_name                   = "sahil-loadbalancer"
+    rg_name                   = "sahil-rg1"
+    backend_address_pool_name = "sahil-backend-pool"
     nic_ka_ip_config_name     = "sahila-internal"
   }
   secondassociation = {
-    nic_name                  = "dusranic"
-    nic_rg_name               = "rit-rg1"
-    lb_name                   = "rit-loadbalancer"
-    rg_name                   = "rit-rg1"
-    backend_address_pool_name = "rit-backend-pool"
-    nic_ka_ip_config_name     = "dusra-internal"
+    nic_name                  = "secondnic"
+    nic_rg_name               = "sahil-rg1"
+    lb_name                   = "sahil-loadbalancer"
+    rg_name                   = "sahil-rg1"
+    backend_address_pool_name = "sahil-backend-pool"
+    nic_ka_ip_config_name     = "second-internal"
   }
 }
 
 lb_probe = {
   lb1 = {
-    probe_name     = "rit-health-probe"
+    probe_name     = "sahil-health-probe"
     probe_protocol = "Tcp"
     probe_port     = 80
-    rg_name        = "rit-rg1"
-    lb_name        = "rit-loadbalancer"
+    rg_name        = "sahil-rg1"
+    lb_name        = "sahil-loadbalancer"
   }
 }
 
 lb_rule = {
   lb1 = {
-    lb_name                         = "rit-loadbalancer"
-    rg_name                         = "rit-rg1"
-    backend_address_pool_db_ka_name = "rit-backend-pool"
-    lb_rule_name                    = "rit-lb-rule"
+    lb_name                         = "sahil-loadbalancer"
+    rg_name                         = "sahil-rg1"
+    backend_address_pool_db_ka_name = "sahil-backend-pool"
+    lb_rule_name                    = "sahil-lb-rule"
     protocol                        = "Tcp"
     frontend_port                   = 80
     backend_port                    = 80
-    frontend_ip_configuration_name  = "rit-frontend-ipconfig"
-    probe_name                      = "rit-health-probe"
+    frontend_ip_configuration_name  = "sahil-frontend-ipconfig"
+    probe_name                      = "sahil-health-probe"
   }
 }

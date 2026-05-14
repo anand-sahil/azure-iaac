@@ -9,7 +9,7 @@ vnets = {
   vnet1 = {
     vnet_name     = "sahilavnet-qa"
     location      = "North Europe"
-    rg_name       = "rit-qa-rg1"
+    rg_name       = "sahil-qa-rg1"
     address_space = ["10.0.0.0/23"]
     subnets = {
       subnet1 = {
@@ -17,7 +17,7 @@ vnets = {
         subnet_address_prefixes = ["10.0.0.0/24"]
       }
       subnet2 = {
-        subnet_name             = "dusrasubnet"
+        subnet_name             = "secondsubnet"
         subnet_address_prefixes = ["10.0.1.0/25"]
       }
       subnetab = {
@@ -25,7 +25,7 @@ vnets = {
         subnet_address_prefixes = ["10.0.1.128/26"]
       }
       subnet3 = {
-        subnet_name             = "tisrasubnet"
+        subnet_name             = "thirdsubnet"
         subnet_address_prefixes = ["10.0.1.192/27"]
       }
     }
@@ -36,7 +36,7 @@ nsg = {
   web_nsg = {
     nsg_name = "sahilansg-qa"
     location = "North Europe"
-    rg_name  = "rit-qa-rg1"
+    rg_name  = "sahil-qa-rg1"
 
     security_rules = {
       allow_http = {
@@ -53,16 +53,16 @@ nsg = {
     }
   }
   empty_rule_nsg = {
-    nsg_name = "dusransg-qa"
+    nsg_name = "secondnsg-qa"
     location = "North Europe"
-    rg_name  = "rit-qa-rg1"
+    rg_name  = "sahil-qa-rg1"
   }
 }
 
 nics = {
   nic1 = {
     nic_name    = "sahilanic-qa"
-    rg_name     = "rit-qa-rg1"
+    rg_name     = "sahil-qa-rg1"
     location    = "North Europe"
     vnet_name   = "sahilavnet-qa"
     subnet_name = "sahilasubnet"
@@ -77,20 +77,20 @@ nics = {
   }
 
   nic2 = {
-    nic_name    = "dusranic-qa"
-    rg_name     = "rit-qa-rg1"
+    nic_name    = "secondnic-qa"
+    rg_name     = "sahil-qa-rg1"
     location    = "North Europe"
     vnet_name   = "sahilavnet-qa"
-    subnet_name = "dusrasubnet"
+    subnet_name = "secondsubnet"
 
     ip_configurations = {
       ipconfig2 = {
-        ip_config_name        = "dusra-internal-qa"
+        ip_config_name        = "second-internal-qa"
         private_ip_allocation = "Dynamic"
         primary               = true
       }
       ipconfig3 = {
-        ip_config_name        = "tisra-internal-qa"
+        ip_config_name        = "third-internal-qa"
         private_ip_allocation = "Static"
         private_ip_address    = "10.0.1.75"
         public_ip_name        = null
@@ -103,12 +103,12 @@ pips = {
   bastionpip = {
     pip_name = "bastionpip-qa"
     location = "North Europe"
-    rg_name  = "rit-qa-rg1"
+    rg_name  = "sahil-qa-rg1"
   }
   loadbalancer = {
     pip_name = "loadbalancerpip-qa"
     location = "North Europe"
-    rg_name  = "rit-qa-rg1"
+    rg_name  = "sahil-qa-rg1"
   }
 }
 
@@ -116,7 +116,7 @@ bastion = {
   bastion1 = {
     bastion_name = "sahilabastion-qa"
     location     = "North Europe"
-    rg_name      = "rit-qa-rg1"
+    rg_name      = "sahil-qa-rg1"
     vnet_name    = "sahilavnet-qa"
     subnet_name  = "AzureBastionSubnet"
     pip_name     = "bastionpip-qa"
@@ -131,23 +131,23 @@ nic_nsg_ids = {
   nic_nsg_1 = {
     nic_name = "sahilanic-qa"
     nsg_name = "sahilansg-qa"
-    rg_name  = "rit-qa-rg1"
+    rg_name  = "sahil-qa-rg1"
   }
   nic_nsg_2 = {
-    nic_name = "dusranic-qa"
+    nic_name = "secondnic-qa"
     nsg_name = "sahilansg-qa"
-    rg_name  = "rit-qa-rg1"
+    rg_name  = "sahil-qa-rg1"
   }
 }
 
 vms = {
   frontend = {
     vm_name                      = "frontendvm-qa"
-    rg_name                      = "rit-qa-rg1"
+    rg_name                      = "sahil-qa-rg1"
     location                     = "North Europe"
     vm_size                      = "Standard_B1s"
     admin_username               = "frontendvm"
-    admin_password               = "Ritesh@12345"
+    admin_password               = "Sahil@12345"
     nic_name                     = "sahilanic-qa"
     os_disk_caching              = "ReadWrite"
     os_disk_storage_account_type = "Standard_LRS"
@@ -168,12 +168,12 @@ vms = {
   }
   backend = {
     vm_name                      = "backendvm-qa"
-    rg_name                      = "rit-qa-rg1"
+    rg_name                      = "sahil-qa-rg1"
     location                     = "North Europe"
     vm_size                      = "Standard_B1s"
     admin_username               = "backendvm"
-    admin_password               = "Ritesh@12345"
-    nic_name                     = "dusranic-qa"
+    admin_password               = "Sahil@12345"
+    nic_name                     = "secondnic-qa"
     os_disk_caching              = "ReadWrite"
     os_disk_storage_account_type = "Standard_LRS"
     vm_publisher                 = "Canonical"
@@ -195,12 +195,12 @@ vms = {
 
 sql_servers = {
   server1 = {
-    sqlservername                 = "ritsqlserver1123-qa"
-    rg_name                       = "rit-qa-rg1"
+    sqlservername                 = "sahilsqlserver1123-qa"
+    rg_name                       = "sahil-qa-rg1"
     location                      = "North Europe"
     version                       = "12.0"
     server_login_username         = "server"
-    server_login_password         = "Ritesh@12345"
+    server_login_password         = "Sahil@12345"
     public_network_access_enabled = true
   }
 }
@@ -223,14 +223,14 @@ firewall_rules = {
 sql_databases = {
   db1 = {
     name           = "appdb"
-    server_name    = "ritsqlserver1123-qa"
-    resource_group = "rit-qa-rg1"
+    server_name    = "sahilsqlserver1123-qa"
+    resource_group = "sahil-qa-rg1"
     sku_name       = "S0"
   }
   db2 = {
     name           = "analyticsdb"
-    server_name    = "ritsqlserver1123-qa"
-    resource_group = "rit-qa-rg1"
+    server_name    = "sahilsqlserver1123-qa"
+    resource_group = "sahil-qa-rg1"
     sku_name       = "S1"
     max_size_gb    = 20
     zone_redundant = false
@@ -239,64 +239,64 @@ sql_databases = {
 
 azurerm_lb_rb = {
   lb1 = {
-    rg_name  = "rit-qa-rg1"
+    rg_name  = "sahil-qa-rg1"
     pip_name = "loadbalancerpip-qa"
-    lb_name  = "rit-loadbalancer-qa"
+    lb_name  = "sahil-loadbalancer-qa"
     location = "North Europe"
     sku      = "Standard"
     frontend_ip_config = [
-      { name = "rit-frontend-ipconfig-qa" }
+      { name = "sahil-frontend-ipconfig-qa" }
     ]
   }
 }
 
 backend_ap_rb = {
   bap1 = {
-    lb_name           = "rit-loadbalancer-qa"
-    rg_name           = "rit-qa-rg1"
-    backend_pool_name = "rit-backend-pool-qa"
+    lb_name           = "sahil-loadbalancer-qa"
+    rg_name           = "sahil-qa-rg1"
+    backend_pool_name = "sahil-backend-pool-qa"
   }
 }
 
 nic_bp_association = {
   firstassociation = {
     nic_name                  = "sahilanic-qa"
-    nic_rg_name               = "rit-qa-rg1"
-    lb_name                   = "rit-loadbalancer-qa"
-    rg_name                   = "rit-qa-rg1"
-    backend_address_pool_name = "rit-backend-pool-qa"
+    nic_rg_name               = "sahil-qa-rg1"
+    lb_name                   = "sahil-loadbalancer-qa"
+    rg_name                   = "sahil-qa-rg1"
+    backend_address_pool_name = "sahil-backend-pool-qa"
     nic_ka_ip_config_name     = "sahila-internal-qa"
   }
   secondassociation = {
-    nic_name                  = "dusranic-qa"
-    nic_rg_name               = "rit-qa-rg1"
-    lb_name                   = "rit-loadbalancer-qa"
-    rg_name                   = "rit-qa-rg1"
-    backend_address_pool_name = "rit-backend-pool-qa"
-    nic_ka_ip_config_name     = "dusra-internal-qa"
+    nic_name                  = "secondnic-qa"
+    nic_rg_name               = "sahil-qa-rg1"
+    lb_name                   = "sahil-loadbalancer-qa"
+    rg_name                   = "sahil-qa-rg1"
+    backend_address_pool_name = "sahil-backend-pool-qa"
+    nic_ka_ip_config_name     = "second-internal-qa"
   }
 }
 
 lb_probe = {
   lb1 = {
-    probe_name     = "rit-health-probe-qa"
+    probe_name     = "sahil-health-probe-qa"
     probe_protocol = "Tcp"
     probe_port     = 80
-    rg_name        = "rit-qa-rg1"
-    lb_name        = "rit-loadbalancer-qa"
+    rg_name        = "sahil-qa-rg1"
+    lb_name        = "sahil-loadbalancer-qa"
   }
 }
 
 lb_rule = {
   lb1 = {
-    lb_name                         = "rit-loadbalancer-qa"
-    rg_name                         = "rit-qa-rg1"
-    backend_address_pool_db_ka_name = "rit-backend-pool-qa"
-    lb_rule_name                    = "rit-lb-rule-qa"
+    lb_name                         = "sahil-loadbalancer-qa"
+    rg_name                         = "sahil-qa-rg1"
+    backend_address_pool_db_ka_name = "sahil-backend-pool-qa"
+    lb_rule_name                    = "sahil-lb-rule-qa"
     protocol                        = "Tcp"
     frontend_port                   = 80
     backend_port                    = 80
-    frontend_ip_configuration_name  = "rit-frontend-ipconfig-qa"
-    probe_name                      = "rit-health-probe-qa"
+    frontend_ip_configuration_name  = "sahil-frontend-ipconfig-qa"
+    probe_name                      = "sahil-health-probe-qa"
   }
 }

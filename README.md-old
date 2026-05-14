@@ -264,8 +264,8 @@ jobs:
       environment:  prod
       tfvars_file:  environments/prod.tfvars
       rgname:       ritkargv
-      saname:       ritkasav
-      scname:       ritkascv
+      saname:       sahilkasav
+      scname:       sahilkascv
       key:          prod.tfstate
 
       runInit:     ${{ github.event_name != 'pull_request' && (github.event_name == 'push' || inputs.do_init == true) }}
@@ -573,8 +573,8 @@ jobs:
       environment:  prod
       tfvars_file:  environments/prod.tfvars
       rgname:       ritkargv
-      saname:       ritkasav
-      scname:       ritkascv
+      saname:       sahilkasav
+      scname:       sahilkascv
       key:          prod.tfstate
 
       runInit:     ${{ github.event_name != 'pull_request' && (github.event_name == 'push' || inputs.do_init == true) }}
@@ -1004,7 +1004,7 @@ Before you deploy to production, make sure all configurations and secrets are va
 
 ## 👨‍💻 Author
 
-**_[Ritesh Sharma](https://www.linkedin.com/in/hrutviatri/)_**  
+**_[Sahil Sharma](https://www.linkedin.com/in/hrutviatri/)_**  
 💼 *DevOps Engineer | Azure | Terraform | CI/CD | Docker | Kubernetes*  
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hrutviatri/)

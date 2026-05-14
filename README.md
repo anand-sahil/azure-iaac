@@ -335,7 +335,7 @@ Creates Azure Bastion hosts for secure, browser-based VM access. Requires:
 Creates **Linux VMs** with configurable OS images, disk settings, and optional **cloud-init custom data** (base64-encoded). Password authentication is enabled (`disable_password_authentication = false`).
 
 ```hcl
-resource "azurerm_linux_virtual_machine" "rit-vm" {
+resource "azurerm_linux_virtual_machine" "sahil-vm" {
   for_each = var.vms
   # Links to existing NIC via data source lookup
   # Supports custom_data for cloud-init scripts (e.g., Nginx + git deployments)
@@ -529,11 +529,11 @@ Each environment has its own `.tfvars` file in `environments/` with environment-
 
 | Environment | File | Naming Pattern | Resource Group | State File |
 |---|---|---|---|---|
-| **Dev** | `dev.tfvars` | base names | `rit-hrutviatri` | `dev.tfstate` |
-| **Test** | `test.tfvars` | `*-test` | `rit-test-rg1` | `test.tfstate` |
-| **QA** | `qa.tfvars` | `*-qa` | `rit-qa-rg1` | `qa.tfstate` |
-| **UAT** | `uat.tfvars` | `*-uat` | `rit-uat-rg1` | `uat.tfstate` |
-| **Prod** | `prod.tfvars` | `*-prod` | `rit-prod-rg1` | `prod.tfstate` |
+| **Dev** | `dev.tfvars` | base names | `sahil-hrutviatri` | `dev.tfstate` |
+| **Test** | `test.tfvars` | `*-test` | `sahil-test-rg1` | `test.tfstate` |
+| **QA** | `qa.tfvars` | `*-qa` | `sahil-qa-rg1` | `qa.tfstate` |
+| **UAT** | `uat.tfvars` | `*-uat` | `sahil-uat-rg1` | `uat.tfstate` |
+| **Prod** | `prod.tfvars` | `*-prod` | `sahil-prod-rg1` | `prod.tfstate` |
 
 All environments share the same region (**North Europe**) and identical infrastructure topology. Differences are only in resource names and state isolation.
 
@@ -668,8 +668,8 @@ MI_NAME="mi-github-runner"
 ACR_NAME="<your-acr-name>"
 
 # Existing state storage
-STATE_RG="ritkasav"
-STATE_SA="ritkascv"
+STATE_RG="sahilkasav"
+STATE_SA="sahilkascv"
 
 # GitHub
 GITHUB_ORG="<your-github-org-or-username>"
@@ -993,17 +993,17 @@ Backend parameters are passed at `terraform init` via the CI/CD pipeline:
 
 | Parameter | Value | Notes |
 |---|---|---|
-| `resource_group_name` | e.g., `ritkasav` | Resource group containing the storage account |
-| `storage_account_name` | e.g., `ritkascv` | Storage account for state files |
-| `container_name` | e.g., `ritkascv` | Blob container name |
+| `resource_group_name` | e.g., `sahilkasav` | Resource group containing the storage account |
+| `storage_account_name` | e.g., `sahilkascv` | Storage account for state files |
+| `container_name` | e.g., `sahilkascv` | Blob container name |
 | `key` | `dev.tfstate` / `prod.tfstate` | Per-environment state file |
 | `use_azuread_auth` | `true` | Authenticate to storage via Azure AD (MSI), not access keys |
 
 ```bash
 terraform init \
-  -backend-config="resource_group_name=ritkasav" \
-  -backend-config="storage_account_name=ritkascv" \
-  -backend-config="container_name=ritkascv" \
+  -backend-config="resource_group_name=sahilkasav" \
+  -backend-config="storage_account_name=sahilkascv" \
+  -backend-config="container_name=sahilkascv" \
   -backend-config="key=dev.tfstate" \
   -backend-config="use_azuread_auth=true"
 ```
@@ -1200,7 +1200,7 @@ Resource Group
 
 ## Author
 
-**[Ritesh Sharma](https://www.linkedin.com/in/hrutviatri/)**
+**[Sahil Sharma](https://www.linkedin.com/in/hrutviatri/)**
 DevOps Engineer | Azure | Terraform | CI/CD | Docker | Kubernetes
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hrutviatri/)
