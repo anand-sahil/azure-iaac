@@ -15,13 +15,13 @@ resource_groups = {
 
 vnets = {
   vnet1 = {
-    vnet_name     = "pahelavnet"
+    vnet_name     = "sahilavnet"
     location      = "North Europe"
     rg_name       = "rit-rg1"
     address_space = ["10.0.0.0/23"] # 512 addresses
     subnets = {
       subnet1 = {
-        subnet_name             = "pahelasubnet"
+        subnet_name             = "sahilasubnet"
         subnet_address_prefixes = ["10.0.0.0/24"] # 256 addresses
       }
       subnet2 = {
@@ -46,7 +46,7 @@ vnets = {
 #####
 nsg = {
   web_nsg = {
-    nsg_name = "pahelansg"
+    nsg_name = "sahilansg"
     location = "North Europe"
     rg_name  = "rit-rg1"
 
@@ -88,15 +88,15 @@ nsg = {
 #####
 nics = {
   nic1 = {
-    nic_name    = "pahelanic"
+    nic_name    = "sahilanic"
     rg_name     = "rit-rg1"
     location    = "North Europe"
-    vnet_name   = "pahelavnet"
-    subnet_name = "pahelasubnet"
+    vnet_name   = "sahilavnet"
+    subnet_name = "sahilasubnet"
 
     ip_configurations = {
       ipconfig1 = {
-        ip_config_name        = "pahela-internal"
+        ip_config_name        = "sahila-internal"
         private_ip_allocation = "Dynamic"
         public_ip_name        = null # "bastionpip" 👈 bas naam
       }
@@ -107,7 +107,7 @@ nics = {
     nic_name    = "dusranic"
     rg_name     = "rit-rg1"
     location    = "North Europe"
-    vnet_name   = "pahelavnet"
+    vnet_name   = "sahilavnet"
     subnet_name = "dusrasubnet"
 
     ip_configurations = {
@@ -150,10 +150,10 @@ pips = {
 #####
 bastion = {
   bastion1 = {
-    bastion_name = "pahelabastion"
+    bastion_name = "sahilabastion"
     location     = "North Europe"
     rg_name      = "rit-rg1"
-    vnet_name    = "pahelavnet"
+    vnet_name    = "sahilavnet"
     subnet_name  = "AzureBastionSubnet"
     pip_name     = "bastionpip"
 
@@ -168,13 +168,13 @@ bastion = {
 #####
 nic_nsg_ids = {
   nic_nsg_1 = {
-    nic_name = "pahelanic"
-    nsg_name = "pahelansg"
+    nic_name = "sahilanic"
+    nsg_name = "sahilansg"
     rg_name  = "rit-rg1"
   }
   nic_nsg_2 = {
     nic_name = "dusranic"
-    nsg_name = "pahelansg"
+    nsg_name = "sahilansg"
     rg_name  = "rit-rg1"
   }
 }
@@ -191,7 +191,7 @@ vms = {
     vm_size                      = "Standard_B1s"
     admin_username               = "frontendvm"
     admin_password               = "Ritesh@12345"
-    nic_name                     = "pahelanic"
+    nic_name                     = "sahilanic"
     os_disk_caching              = "ReadWrite"
     os_disk_storage_account_type = "Standard_LRS"
     vm_publisher                 = "Canonical"
@@ -357,12 +357,12 @@ backend_ap_rb = {
 
 nic_bp_association = {
   firstassociation = {
-    nic_name                  = "pahelanic"
+    nic_name                  = "sahilanic"
     nic_rg_name               = "rit-rg1"
     lb_name                   = "rit-loadbalancer"
     rg_name                   = "rit-rg1"
     backend_address_pool_name = "rit-backend-pool"
-    nic_ka_ip_config_name     = "pahela-internal"
+    nic_ka_ip_config_name     = "sahila-internal"
   }
   secondassociation = {
     nic_name                  = "dusranic"

@@ -7,12 +7,12 @@ resource_groups = {
 
 vnets = {
   vnet1 = {
-    vnet_name     = "pahelavnet-prod"
+    vnet_name     = "sahilavnet-prod"
     location      = "North Europe"
     rg_name       = "rit-prod-rg1"
     address_space = ["10.0.0.0/23"]
     subnets = {
-      subnet1  = { subnet_name = "pahelasubnet", subnet_address_prefixes = ["10.0.0.0/24"] }
+      subnet1  = { subnet_name = "sahilasubnet", subnet_address_prefixes = ["10.0.0.0/24"] }
       subnet2  = { subnet_name = "dusrasubnet", subnet_address_prefixes = ["10.0.1.0/25"] }
       subnetab = { subnet_name = "AzureBastionSubnet", subnet_address_prefixes = ["10.0.1.128/26"] }
       subnet3  = { subnet_name = "tisrasubnet", subnet_address_prefixes = ["10.0.1.192/27"] }
@@ -23,7 +23,7 @@ vnets = {
 
 nsg = {
   web_nsg = {
-    nsg_name = "pahelansg-prod"
+    nsg_name = "sahilansg-prod"
     location = "North Europe"
     rg_name  = "rit-prod-rg1"
     security_rules = {
@@ -49,14 +49,14 @@ nsg = {
 
 nics = {
   nic1 = {
-    nic_name    = "pahelanic-prod"
+    nic_name    = "sahilanic-prod"
     rg_name     = "rit-prod-rg1"
     location    = "North Europe"
-    vnet_name   = "pahelavnet-prod"
-    subnet_name = "pahelasubnet"
+    vnet_name   = "sahilavnet-prod"
+    subnet_name = "sahilasubnet"
     ip_configurations = {
       ipconfig1 = {
-        ip_config_name        = "pahela-internal-prod"
+        ip_config_name        = "sahila-internal-prod"
         private_ip_allocation = "Dynamic"
         public_ip_name        = null
       }
@@ -66,7 +66,7 @@ nics = {
     nic_name    = "dusranic-prod"
     rg_name     = "rit-prod-rg1"
     location    = "North Europe"
-    vnet_name   = "pahelavnet-prod"
+    vnet_name   = "sahilavnet-prod"
     subnet_name = "dusrasubnet"
     ip_configurations = {
       ipconfig2 = {
@@ -91,10 +91,10 @@ pips = {
 
 bastion = {
   bastion1 = {
-    bastion_name     = "pahelabastion-prod"
+    bastion_name     = "sahilabastion-prod"
     location         = "North Europe"
     rg_name          = "rit-prod-rg1"
-    vnet_name        = "pahelavnet-prod"
+    vnet_name        = "sahilavnet-prod"
     subnet_name      = "AzureBastionSubnet"
     pip_name         = "bastionpip-prod"
     ip_configuration = { name = "bastion-ipconfig-prod" }
@@ -102,8 +102,8 @@ bastion = {
 }
 
 nic_nsg_ids = {
-  nic_nsg_1 = { nic_name = "pahelanic-prod", nsg_name = "pahelansg-prod", rg_name = "rit-prod-rg1" }
-  nic_nsg_2 = { nic_name = "dusranic-prod", nsg_name = "pahelansg-prod", rg_name = "rit-prod-rg1" }
+  nic_nsg_1 = { nic_name = "sahilanic-prod", nsg_name = "sahilansg-prod", rg_name = "rit-prod-rg1" }
+  nic_nsg_2 = { nic_name = "dusranic-prod", nsg_name = "sahilansg-prod", rg_name = "rit-prod-rg1" }
 }
 
 vms = {
@@ -114,7 +114,7 @@ vms = {
     vm_size                      = "Standard_B1s"
     admin_username               = "frontendvm"
     admin_password               = "Ritesh@12345"
-    nic_name                     = "pahelanic-prod"
+    nic_name                     = "sahilanic-prod"
     os_disk_caching              = "ReadWrite"
     os_disk_storage_account_type = "Standard_LRS"
     vm_publisher                 = "Canonical"
@@ -197,7 +197,7 @@ backend_ap_rb = {
 }
 
 nic_bp_association = {
-  firstassociation  = { nic_name = "pahelanic-prod", nic_rg_name = "rit-prod-rg1", lb_name = "rit-loadbalancer-prod", rg_name = "rit-prod-rg1", backend_address_pool_name = "rit-backend-pool-prod", nic_ka_ip_config_name = "pahela-internal-prod" }
+  firstassociation  = { nic_name = "sahilanic-prod", nic_rg_name = "rit-prod-rg1", lb_name = "rit-loadbalancer-prod", rg_name = "rit-prod-rg1", backend_address_pool_name = "rit-backend-pool-prod", nic_ka_ip_config_name = "sahila-internal-prod" }
   secondassociation = { nic_name = "dusranic-prod", nic_rg_name = "rit-prod-rg1", lb_name = "rit-loadbalancer-prod", rg_name = "rit-prod-rg1", backend_address_pool_name = "rit-backend-pool-prod", nic_ka_ip_config_name = "dusra-internal-prod" }
 }
 
