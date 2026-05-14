@@ -24,7 +24,7 @@ on:
 
 permissions:
   id-token: write
-  contents: readd
+  contents: read
 
 concurrency:
   group: prod-tf
