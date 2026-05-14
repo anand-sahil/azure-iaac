@@ -23,7 +23,8 @@ on:
       do_destroy:           { type: boolean, default: false, description: "Run terraform destroy?" }
 
 permissions:
-  contents: read
+  id-token: write
+  contents: readd
 
 concurrency:
   group: prod-tf
